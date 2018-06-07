@@ -27,3 +27,36 @@ app.listen(port,()=>console.log(`server running on port${port}`));
 ```
   
 </li>
+
+
+
+<li>
+HOW TO CREATE A MODEL AND EXPORT IT
+
+```const moongoose=require('moongose');
+const Schema =mongoose.Schema;
+
+//Create Schema
+const UserSchema =new Schema({
+    name:{
+        type:String,
+        required:true
+    },
+    email:{
+        type:String,
+        required:true
+    },
+    avatar:{
+        type:String,
+        required:true
+    },
+    data:{
+        type:Date,
+        default:Date.now
+    }
+});
+
+module.exports=User=mongoose.model('users',UserSchema);
+```
+  
+</li>
