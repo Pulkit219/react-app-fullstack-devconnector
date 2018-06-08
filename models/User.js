@@ -1,4 +1,4 @@
-const moongoose=require('moongose');
+const mongoose=require('mongoose');
 const Schema =mongoose.Schema;
 
 //Create Schema
@@ -11,11 +11,16 @@ const UserSchema =new Schema({
         type:String,
         required:true
     },
-    avatar:{
+    password:{
         type:String,
         required:true
     },
-    data:{
+    avatar:{
+        type:String
+    
+    },
+    
+    date:{
         type:Date,
         default:Date.now
     }
