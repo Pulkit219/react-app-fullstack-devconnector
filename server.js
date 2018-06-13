@@ -24,11 +24,10 @@ mongoose.connect(db)
 
 app.get('/', (req,res)=>res.send('Hello ddddddd'));
 
-// //passport middleware
-// app.use(passport.initialize());
-
-// //Passport Config
-// require('./config/passport')
+//Passport middleware
+app.use(passport.initialize());
+//Passport Config
+require('./config/passport')(passport);
 
 
 //USE ROUTES

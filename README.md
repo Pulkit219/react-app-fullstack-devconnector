@@ -114,3 +114,92 @@ router.post('/register', (req, res) => {
 ```
   
 </li>
+
+
+
+<li>
+HOW TO CREATE A TOKRN WITH JWT
+
+```bcrypt.compare(password, user.password).then(isMatch => {
+        if (isMatch) {
+          // res.json({msg:'successs'});
+         
+          // User Matched
+          const payload = { id: user.id, name: user.name, avatar: user.avatar }; // Create JWT Payload
+  
+          // Sign Token
+          jwt.sign(
+            payload,
+            keys.secretOrKey,
+            { expiresIn: 3600 },
+            (err, token) => {
+              res.json({
+                success: true,
+                token: 'Bearer ' + token
+              });
+            }
+          );
+        } else {
+          // errors.password = 'Password incorrect';
+          // return res.status(400).json(errors);
+         
+            res.status(400).json({password:"Password incorrect"});
+          
+        }
+      });
+```
+  
+</li>
+
+
+
+<li>
+HOW TO USE PASSPORT WITH JWT STRATEGY
+
+```//Passport middleware
+app.use(passport.initialize());
+//Passport Config
+require('./config/passport')(passport);
+
+
+
+EXTRACTING JWT TOKEN INFO
+const JwtStrategy = require('passport-jwt').Strategy;
+const ExtractJwt = require('passport-jwt').ExtractJwt;
+const mongoose = require('mongoose');
+const User = mongoose.model('users');
+const keys = require('../config/keys');
+
+const opts = {};
+opts.jwtFromRequest = ExtractJwt.fromAuthHeaderAsBearerToken();
+opts.secretOrKey = keys.secretOrKey;
+
+module.exports = passport => {
+  passport.use(
+    new JwtStrategy(opts, (jwt_payload, done) => {
+      User.findById(jwt_payload.id)
+        .then(user => {
+          if (user) {
+            return done(null, user);
+          }
+          return done(null, false);
+        })
+        .catch(err => console.log(err));
+    })
+  );
+};
+
+
+ADDING A MIDDLEWARE AND MAKING ROUTE PROTECTED
+router.get('/current',passport.authenticate('jwt',{session:false}), (req,res)=>{
+  res.json({
+    id:req.user.id,
+    name:req.user.name,
+    email:req.user.email
+  });
+})
+
+```
+  
+</li>
+
