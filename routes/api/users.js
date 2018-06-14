@@ -7,6 +7,11 @@ const jwt = require('jsonwebtoken');
 const keys =require('../../config/keys');
 const passport =require('passport');
 
+
+//Load Input Validation
+const validateRegisterInput =require('../../validation/register');
+const validateLoginInput = require('../../validation/login');
+
 // @route   GET api/users/test
 // @desc    Tests users route
 // @access  Public
@@ -17,12 +22,12 @@ router.get('/test', (req,res)=>res.json({msg:"user works"}));
 // @desc    Tests users route
 // @access  Public
 router.post('/register', (req, res) => {
-    // const { errors, isValid } = validateRegisterInput(req.body);
+    const { errors, isValid } = validateRegisterInput(req.body);
   
     // //Check Validation
-    // if (!isValid) {
-    //   return res.status(400).json(errors);
-    // }
+    if (!isValid) {
+      return res.status(400).json(errors);
+    }
   
     User.findOne({ email: req.body.email }).then(user => {
       if (user) {
@@ -62,12 +67,12 @@ router.post('/register', (req, res) => {
 // @desc    Login User / Returning JWT Token
 // @access  Public
 router.post('/login', (req, res) => {
-    // const { errors, isValid } = validateLoginInput(req.body);
+    const { errors, isValid } = validateLoginInput(req.body);
   
     // Check Validation
-    // if (!isValid) {
-    //   return res.status(400).json(errors);
-    // }
+    if (!isValid) {
+      return res.status(400).json(errors);
+    }
   
     const email = req.body.email;
     const password = req.body.password;
@@ -76,8 +81,8 @@ router.post('/login', (req, res) => {
     User.findOne({ email }).then(user => {
       // Check for user
       if (!user) {
-        // errors.email = 'User not found';
-        return res.status(404).json({email:'user not found'});
+        errors.email = 'User not found';
+        return res.status(404).json(errors);
       }
   
       // Check Password
@@ -101,8 +106,8 @@ router.post('/login', (req, res) => {
             }
           );
         } else {
-          // errors.password = 'Password incorrect';
-          // return res.status(400).json(errors);
+          errors.password = 'Password incorrect';
+          return res.status(400).json(errors);
          
             res.status(400).json({password:"Password incorrect"});
           

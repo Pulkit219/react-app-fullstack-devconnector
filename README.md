@@ -118,7 +118,7 @@ router.post('/register', (req, res) => {
 
 
 <li>
-HOW TO CREATE A TOKRN WITH JWT
+HOW TO CREATE A TOKEN WITH JWT
 
 ```bcrypt.compare(password, user.password).then(isMatch => {
         if (isMatch) {
